@@ -11,7 +11,7 @@ const NewComponentConfig = {
 export default function NewComponent(props) {
   console.log(props)
   return (
-    <div>Nuevo componente</div>
+    <div className='newComponentColor'>Nuevo componente</div>
   )
 }
 

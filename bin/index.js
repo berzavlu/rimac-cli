@@ -9,7 +9,9 @@ const isRootPathAEM = fs.existsSync('app')
 const {
   appendLineRouteToMappedComponent,
   createDirectoryReact,
-  createDirectoryAEM
+  createDirectoryAEM,
+  appendLineRouteToSass,
+  createFileSass
 } = require('./utils')
 
 const options = require('./yargs')
@@ -22,7 +24,8 @@ async function init() {
       await appendLineRouteToMappedComponent(name)
       await createDirectoryReact(name)
       await createDirectoryAEM(name)
-
+      await appendLineRouteToSass(name)
+      await createFileSass(name)
       log(chalk.green.bold('¡AEM componente listo!'))
     } catch (err) {
       log(error('Ocurrió un error al crear los archivos'))

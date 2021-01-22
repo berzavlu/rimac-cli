@@ -82,8 +82,46 @@ function createDirectoryAEM(name) {
   })
 }
 
+function appendLineRouteToSass(name) {
+  const path = './app/react/src/styles/styles.scss'
+  const content = `\n@import "./components/${name}";`
+
+  return new Promise((resolve, reject) => {
+    addFile(path, content)
+      .then(() => {
+        log('Ruta de estilo agregado al archivo style.scss')
+        resolve()
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
+
+function createFileSass(name) {
+  const path = './app/react/src/styles/components'
+  const newFile = `${path}/_${name}.scss`
+
+  const contentStyle = `.newComponentColor {
+  color: red;
+}`
+
+  return new Promise((resolve, reject) => {
+    editFile(newFile, contentStyle)
+      .then(() => {
+        log('Archivo de estilo creado en components css')
+        resolve()
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
+
 module.exports = {
   appendLineRouteToMappedComponent,
   createDirectoryReact,
-  createDirectoryAEM
+  createDirectoryAEM,
+  appendLineRouteToSass,
+  createFileSass
 }
