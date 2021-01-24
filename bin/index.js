@@ -19,7 +19,7 @@ const arrQuestions = [
 async function init() {
   try {
     const answers = await inquirer.prompt(arrQuestions)
-    buildComponent(answers.name)
+    buildComponent(answers.nameComponent)
   } catch (error) {
     if (error.isTtyError) {
       log(red('Prompt no funciona en el entorno actual'))

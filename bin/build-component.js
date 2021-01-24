@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const chalk = require('chalk')
 
 const { createDir, addFile, readFile, editFile } = require('./helpers')
 const { log, red } = require('../src/utils')
@@ -131,7 +132,6 @@ async function buildComponent(name) {
       log(chalk.green.bold('¡AEM componente listo!'))
     } catch (err) {
       log(red('Ocurrió un error al crear los archivos'))
-      console.log(err)
     }
   } else {
     log(red('No es un APP de aem o no se encuentra en la ruta raíz del proyecto'))
