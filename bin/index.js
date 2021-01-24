@@ -1,39 +1,43 @@
 #!/usr/bin/env node
-const fs = require('fs')
-const chalk = require('chalk')
+// Dependencias
+const inquirer = require('inquirer'),
+      figlet = require('figlet')
 
-const log = console.log
-const error = chalk.red.bold
-const isRootPathAEM = fs.existsSync('app')
+// Files
+const buildComponent = require('./build-component')
+const prompt = require('../src/prompt')
+const constants = require('../src/constants')
+const config = require('../src/config')
+const { log, red } = require('../src/utils')
 
-const {
-  appendLineRouteToMappedComponent,
-  createDirectoryReact,
-  createDirectoryAEM,
-  appendLineRouteToSass,
-  createFileSass
-} = require('./utils')
-
-const options = require('./yargs')
+const arrQuestions = [
+  prompt.typeProyect,
+  prompt.typeComponentAEM,
+  prompt.nameComponent
+]
 
 async function init() {
-  if (isRootPathAEM) {
-    try {
-      const { name } = options
-
-      await appendLineRouteToMappedComponent(name)
-      await createDirectoryReact(name)
-      await createDirectoryAEM(name)
-      await appendLineRouteToSass(name)
-      await createFileSass(name)
-      log(chalk.green.bold('¡AEM componente listo!'))
-    } catch (err) {
-      log(error('Ocurrió un error al crear los archivos'))
-      console.log(err)
+  try {
+    const answers = await inquirer.prompt(arrQuestions)
+    buildComponent(answers.name)
+  } catch (error) {
+    if (error.isTtyError) {
+      log(red('Prompt no funciona en el entorno actual'))
+    } else {
+      log(red('Ocurrió un error inesperado'))
+      log(error)
     }
-  } else {
-    log(error('No es un APP de aem o no se encuentra en la ruta raíz del proyecto'))
   }
 }
 
-init()
+figlet(
+  constants.TEXT_ASCII,
+  config.ASCII_CONFIG,
+  async (err, dataASCII) => {
+  if (err) {
+    log(red('Ocurrió un error de ASCII'))
+    return
+  }
+  log(dataASCII)
+  init()
+})

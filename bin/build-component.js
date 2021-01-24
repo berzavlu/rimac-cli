@@ -1,7 +1,8 @@
 const path = require('path')
-const { createDir, addFile, readFile, editFile } = require('./helpers')
+const fs = require('fs')
 
-const log = console.log
+const { createDir, addFile, readFile, editFile } = require('./helpers')
+const { log, red } = require('../src/utils')
 
 function generateContentReact(newRoute) {
   const file = path.resolve(__dirname, 'defaultReactComponent.txt')
@@ -118,10 +119,23 @@ function createFileSass(name) {
   })
 }
 
-module.exports = {
-  appendLineRouteToMappedComponent,
-  createDirectoryReact,
-  createDirectoryAEM,
-  appendLineRouteToSass,
-  createFileSass
+async function buildComponent(name) {
+  const isRootPathAEM = fs.existsSync('app')
+  if (isRootPathAEM) {
+    try {
+      await appendLineRouteToMappedComponent(name)
+      await createDirectoryReact(name)
+      await createDirectoryAEM(name)
+      await appendLineRouteToSass(name)
+      await createFileSass(name)
+      log(chalk.green.bold('¡AEM componente listo!'))
+    } catch (err) {
+      log(red('Ocurrió un error al crear los archivos'))
+      console.log(err)
+    }
+  } else {
+    log(red('No es un APP de aem o no se encuentra en la ruta raíz del proyecto'))
+  }
 }
+
+module.exports = buildComponent
